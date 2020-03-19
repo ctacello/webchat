@@ -12,7 +12,6 @@ h3 {
 }
 
 h4 {
-    font-size: 20px;
     color: #fff; 
     white-space: pre-wrap; 
     word-wrap: break-word; 
@@ -39,9 +38,24 @@ span {
     &__auth {
         display: flex;
         justify-content: right;
+        align-items: center;
         position: absolute;
         top: 22px;
         right: 22px;
+    }
+
+    &__user {
+        display: flex;
+    }
+
+    &__username {
+        color: white;
+        font-family: "Roboto","Helvetica","Arial",sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0;
+        cursor: pointer;
     }
 }
 
@@ -52,6 +66,8 @@ span {
 .main {
     display: flex;
     justify-content: center;
+    font-family: monospace;
+    font-size: 18px;
     
     &__container {
         max-width: 1024px;
