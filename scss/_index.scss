@@ -11,6 +11,21 @@ h3 {
     text-shadow: 2px 2px 2px black;
 }
 
+h4 {
+    font-size: 20px;
+    color: #fff; 
+    white-space: pre-wrap; 
+    word-wrap: break-word; 
+    text-shadow: 0 0 10px #ccc; 
+}
+
+span { 
+    color: #fff; 
+    white-space: pre-wrap; 
+    word-wrap: break-word; 
+    text-shadow: 0 0 10px #ccc; 
+}
+
 .header {
     display: flex;
     justify-content: center;
@@ -57,7 +72,26 @@ h3 {
     }
 
     &__messages {
+        background-color: #333;
         margin: 10px;
+        height: calc(100% - 65px); 
+        padding: 10px;
+        display: flex;
+        flex-flow: column;
+        align-items: baseline;
+    }
+
+    &__message {
+        background-color: #616161;
+        margin-bottom: 5px;
+        padding: 10px;
+        display: inline-block;
+        // border-radius: 15px;
+    }
+
+    &__me {
+        align-self: flex-end;
+        text-align: right;
     }
 
     &__input-form {
@@ -67,5 +101,20 @@ h3 {
 
     &__users {
         flex-basis: 30%;
+        background-color: #333;
+        margin: 10px;
+        padding: 10px;
+        color: #fff;
+        word-wrap: break-word; 
+        text-shadow: 0 0 10px #ccc; 
+    }
+
+    &__usersonline {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    &__userslist {
+        margin-bottom: 5px;
     }
 }

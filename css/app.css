@@ -65,6 +65,21 @@ h3 {
   text-shadow: 2px 2px 2px black;
 }
 
+h4 {
+  font-size: 20px;
+  color: #fff;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  text-shadow: 0 0 10px #ccc;
+}
+
+span {
+  color: #fff;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  text-shadow: 0 0 10px #ccc;
+}
+
 .header {
   display: flex;
   justify-content: center;
@@ -104,7 +119,23 @@ h3 {
   flex-basis: 70%;
 }
 .main__messages {
+  background-color: #333;
   margin: 10px;
+  height: calc(100% - 65px);
+  padding: 10px;
+  display: flex;
+  flex-flow: column;
+  align-items: baseline;
+}
+.main__message {
+  background-color: #616161;
+  margin-bottom: 5px;
+  padding: 10px;
+  display: inline-block;
+}
+.main__me {
+  align-self: flex-end;
+  text-align: right;
 }
 .main__input-form {
   display: flex;
@@ -112,6 +143,19 @@ h3 {
 }
 .main__users {
   flex-basis: 30%;
+  background-color: #333;
+  margin: 10px;
+  padding: 10px;
+  color: #fff;
+  word-wrap: break-word;
+  text-shadow: 0 0 10px #ccc;
+}
+.main__usersonline {
+  text-align: center;
+  margin-bottom: 25px;
+}
+.main__userslist {
+  margin-bottom: 5px;
 }
 
 /*# sourceMappingURL=app.css.map */

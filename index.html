@@ -26,15 +26,35 @@
     <main class="main">
         <div class="main__container">
             <div class="main__chat">
-                <div class="main__messages">messages</div>
+                <div class="main__messages">
+                    <div class="main__message">
+                        <h4> > Username</h4>
+                        <span> > Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+                    </div>
+                    <div class="main__message">
+                        <h4> > Username2</h4>
+                        <span> > Lorem ipsum dolor sit amet.</span>
+                    </div>
+                    <div class="main__message main__me">
+                        <h4>Me < </h4>
+                        <span>Lorem ipsum dolor sit amet. < </span>
+                    </div>
+                </div>
                 <div class="main__input-form">
+                    <select name="main__select">
+                        <option value="value1" selected>All</option> 
+                        <option value="value2">Private</option>
+                        <option value="value3">Team</option>
+                    </select>
                     <input id="message" type="text" class="main__input">
                     <button id="submit" disabled class="main__send">SEND</button>
                 </div>
             </div>
             <div class="main__users">
-                <div class="main__usersonline">users online</div>
-                <div class="main__userslist">users list</div>
+                <h4 class="main__usersonline">Current users online: 3</h4>
+                <div class="main__userslist"> [i] Username</div>
+                <div class="main__userslist"> [i] Username2</div>
+                <div class="main__userslist"> [i] Me</div>
             </div>
         </div>
     </main>
