@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporative WebChat</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="media/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="media/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="media/favicon-16x16.png">
+<link rel="manifest" href="media/site.webmanifest">
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/app.css.map">
+</head>
+<body>
+    <header class="header">
+        <h3 class="header_title">Corporative WebChat</h3>
+        <div class="header__auth">
+            <div class="header_user auth_margin">
+                <img src="" alt="">
+                <div class="header__username">User name</div>
+            </div>
+            <button id="submit" disabled class="header__signin auth_margin">signin</button>
+            <button id="submit" disabled class="header__logout auth_margin">logout</button>
+        </div>
+    </header>
+    <main class="main">
+        <div class="main__container">
+            <div class="main__chat">
+                <div class="main__messages">messages</div>
+                <div class="main__input-form">
+                    <input id="message" type="text" class="main__input">
+                    <button id="submit" disabled class="main__send">SEND</button>
+                </div>
+            </div>
+            <div class="main__users">
+                <div class="main__usersonline">users online</div>
+                <div class="main__userslist">users list</div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
