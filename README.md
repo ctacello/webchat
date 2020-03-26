@@ -2,6 +2,7 @@
 Corporative Multifunctional WebChat
 
 Roadmap:
+https://trello.com/b/pCRRUpDQ/corporative-webchat
 
 - make supportlike chat/widget;
 - make different rooms;
