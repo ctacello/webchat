@@ -20,7 +20,8 @@ class App {
                     this.messages.push(message);
                     this.displayMessage(message);
                 }
-                // console.log('messages');
+                // console.log('Messages: ', 'messages');
+                console.log('Message: ', message);
             })
         })
     }
@@ -45,7 +46,7 @@ class App {
         messageStorage.appendChild(divMessage);
     }
 
-    displayUser() {
+    displayUserGoogle() {
         popupWindow();
 
         let signOutButton = document.querySelector('.header__signout');
@@ -53,17 +54,35 @@ class App {
 
         let userName = document.querySelector('.header__username');
         userName.hidden = false;
+
+        // let nickname = function(){
+        //     if (this.currentUser.displayName !== null) {
+        //         userName.innerText = this.currentUser.displayName;
+        //     } else {
+        //         return userName.innerText = this.currentUser.email;
+        //     }
+        // }
+
+        // nickname();
         userName.innerText = this.currentUser.displayName;
+         
 
         let userPic = document.querySelector('.header__userpic');
         userPic.hidden = false;
         userPic.innerHTML = '';
 
-        // let img = document.createElement('img');
-        // img.src = this.currentUser.photoURL;
-        userPic.style.backgroundImage = `url(${this.currentUser.photoURL})`;
+        userPic.style.backgroundImage = `url(${this.currentUser.photoURL})`
+        
+        // let newUserPic = document.querySelector('.main__anonymouspic');
+        // let avatar = function() {
+        //     if (userPic.style.backgroundImage !== null) {
+        //         userPic.style.backgroundImage = `url(${this.currentUser.photoURL})`;
+        //     } else {
+        //         return userPic.style.backgroundImage = `url(${newUserPic.src})`
+        //     }
+        // }
 
-        // userPic.appendChild(img);
+        // avatar();
 
         signInButton.hidden = true;
 
@@ -79,6 +98,46 @@ class App {
 
                 let span = document.createElement('span');
                 span.innerText = ' ' + this.currentUser.displayName;
+
+            usernameInUserList.appendChild(a);
+            usernameInUserList.appendChild(span);
+            
+        userList.appendChild(usernameInUserList);
+    }
+
+    displayUserRegistered() {
+        popupWindow();
+
+        let signOutButton = document.querySelector('.header__signout');
+        signOutButton.hidden = false;
+
+        let userName = document.querySelector('.header__username');
+        userName.hidden = false;
+
+        userName.innerText = this.currentUser.email;
+        
+
+        let userPic = document.querySelector('.header__userpic');
+        userPic.hidden = false;
+        userPic.innerHTML = '';
+        
+        let newUserPic = document.querySelector('.main__anonymouspic');
+        userPic.style.backgroundImage = `url(${newUserPic.src})`
+        
+        signInButton.hidden = true;
+
+        let userList = document.querySelector('.main__users');
+
+            let usernameInUserList = document.createElement('div');
+            usernameInUserList.className = 'main_userlist';
+
+                let a = document.createElement('a');
+                a.className = 'main__userinfo';
+                a.href = 'http://';
+                a.innerText = '[i]';
+
+                let span = document.createElement('span');
+                span.innerText = ' ' + this.currentUser.email;
 
             usernameInUserList.appendChild(a);
             usernameInUserList.appendChild(span);
@@ -105,15 +164,15 @@ class App {
         // console.log(resultAuth);
         this.currentUser = resultAuth.user;
 
-        this.displayUser();
+        this.displayUserGoogle();
     }
 
-    registerUser = () => {
+    registerUser = async () => {
 
         let email = document.querySelector('.main__email').value;
         let password = document.querySelector('.main__password').value;
 
-        firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+        let resultAuth = await firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
             // Handle Errors here.
             var errorCode = error.code;
             console.log('Create user errorCode: ', errorCode);
@@ -121,19 +180,33 @@ class App {
             console.log('Create user errorMessage: ', errorMessage);
             // ...
           });
-
-        this.displayUser();
+        
+        this.currentUser = resultAuth.user;
+        
+        this.displayUserRegistered();
+        console.log(this.currentUser);
     }
 
     signInWithEmailAndPassword = async () => {
-        firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+
+        let email = document.querySelector('.main__email').value;
+        let password = document.querySelector('.main__password').value;
+
+        let resultAuth = await firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
             // Handle Errors here.
             var errorCode = error.code;
             console.log('Login errorCode: ', errorCode);
             var errorMessage = error.message;
             console.log('Login errorMessage: ', errorMessage);
             // ...
-          });
+        });
+
+        console.log('resultAuth: ', resultAuth);
+        this.currentUser = resultAuth.user;
+        console.log('this.currentUser: ', this.currentUser);
+
+        this.displayUserRegistered();
+        console.log(resultAuth);
     }
 
     signOut = () => {
@@ -189,13 +262,6 @@ class App {
 }
 
 let myChat = new App();
-
-// register Email
-// let email = document.querySelector('.main__email');
-// email.addEventListener('submit', myChat.registerEmail);
-
-// let password = document.querySelector('.main__password');
-// password.addEventListener('submit', myChat.registerPassword)
 
 // register User Email and Password
 let registerLink = document.querySelector('.main__register');
