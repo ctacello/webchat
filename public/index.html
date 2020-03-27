@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporative WebChat</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="../media/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../media/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../media/favicon-16x16.png">
+    <link rel="manifest" href="media/site.webmanifest">
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/app.css.map">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <header class="header">
+        <h3 class="header_title">Corporative WebChat</h3>
+        <div class="header__auth">
+            <div class="header__user auth_margin">
+                <div hidden class="header__userpic"></div>
+                <div hidden class="header__username"></div>
+            </div>
+            <button hidden id="submit" class="header__signin auth_margin">signin</button>
+            <button hidden id="submit" class="header__signout auth_margin">signout</button>
+        </div>
+    </header>
+    <main class="main">
+        <div class="main__popup main__popup_display-none">
+            <div class="main__content">
+                <img src="media/close_button.png" alt="Close" class="main__close">
+                <img src="media/anonymous.png" alt="UserPic" class="main__anonymouspic">
+                <input type="email" placeholder="Email" class="main__email">
+                <input type="password" placeholder="Password" class="main__password" minlength="6">
+                <button href="#" class="main__signinbutton">Sign In</button>
+                <div class="main__registration">
+                    <span>Don't have an account?</span>
+                    <a href="#" class="main__register">Register Now!</a>
+                </div>
+                <div class="main__content-seperator">
+                    <i>or</i>
+                </div>
+                <a href="#" class="main__button-google">
+                    <i class="main__button-google_img"></i> 
+                    Sign in with 
+                    <b>Google</b>
+                </a>
+            </div>
+        </div>
+        <div class="main__container">
+            <div class="main__chat">
+                <div class="main__messages">
+                    <div class="main__message main__message_margin">
+                        <h4 class="main__nickname">Username</h4>
+                        <span class="main__text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+                    </div>
+                    <div class="main__message main__message_margin">
+                        <h4 class="main__nickname">Username2 > Me</h4>
+                        <span class="main__text">Lorem ipsum dolor sit amet.</span>
+                    </div>
+                    <div class="main__message main__me">
+                        <h4 class="main__nickname">Me</h4>
+                        <span class="main__text">Lorem ipsum dolor sit amet. </span>
+                    </div>
+                    <div class="main__message main__private main__message_margin">
+                        <h4 class="main__nickname">Username > Private</h4>
+                        <span class="main__text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+                    </div>
+                    <div class="main__message main__team main__message_margin">
+                        <h4 class="main__nickname">Username2 > [DevTeam]</h4>
+                        <span class="main__text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+                    </div>
+                </div>
+                <div class="main__form">
+                    <select name="main__select">
+                        <option value="value1" selected>All</option> 
+                        <option value="value2">Private</option>
+                        <option value="value3">Team</option>
+                    </select>
+                    <input id="nickname" type="text" placeholder="Ник пользователя" class="main__usernickname">
+                
+                    <form class="main__input-form">
+                        <input id="message" type="text" placeholder="Ваше сообщение" class="main__input">
+                        <button id="submit" disabled type="submit" class="main__send">SEND</button>
+                    </form>
+                </div>
+            </div>
+            <div class="main__users">
+                <h4 class="main__usersonline"></h4>
+                <div class="main__userslist"> <a class='main__userinfo' href="http://">[i]</a> <span>Username</span> <span>[Junior]</span></div>
+                <div class="main__userslist"> <a class='main__userinfo' href="http://">[i]</a> <span>Username2</span> <span>[DevTeam]</span></div>
+                <div class="main__userslist"> <a class='main__userinfo' href="http://">[i]</a> <span>Me</span> <span>[DevTeam]</span></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="/__/firebase/7.12.0/firebase-app.js"></script>
+    <script src="/__/firebase/7.11.0/firebase-auth.js"></script>
+    <script src="/__/firebase/7.11.0/firebase-storage.js"></script>
+    <!-- <script src="/__/firebase/7.11.0/firebase-messaging.js"></script> -->
+    <script src="/__/firebase/7.11.0/firebase-firestore.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+
+    <!-- Initialize Firebase -->
+    <script src="/__/firebase/init.js"></script>
+    <script src="dist/main.js"></script>
+</body>
+</html>
