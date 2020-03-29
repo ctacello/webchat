@@ -9,9 +9,9 @@ class App {
     }
 
     initFirebaseListeners() {
-        this.db.collection('messages').onSnapshot((snapshot) => {
+        let messageOrderByTime = this.db.collection('messages').orderBy('timestamp', 'asc');
+        messageOrderByTime.onSnapshot((snapshot) => {
             snapshot.forEach(doc => {
-                // console.log(doc);
 
                 let message = doc.data();
                 message.id = doc.id;
@@ -21,8 +21,32 @@ class App {
                     this.displayMessage(message);
                 }
                 // console.log('Messages: ', 'messages');
-                console.log('Message: ', message);
+                // console.log('Message: ', message);
             })
+        })
+    }
+
+    // получение сообщениея и активация кнопки для отправки
+    textMessage = (e) => {
+        // console.log(e);
+        if (e.target.value) {
+            formButton.disabled = false;
+        } else {
+            formButton.disabled = true;
+        }  
+    }
+
+    // отправление сообщения
+    sendMessage = (e) => {
+        e.preventDefault();
+
+        let messageBody = e.target[0].value;
+
+        this.db.collection('messages').add({
+            username: this.currentUser.displayName,
+            email: this.currentUser.email,
+            message: messageBody,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
         })
     }
 
@@ -32,8 +56,38 @@ class App {
             let divMessage = document.createElement('div');
             divMessage.classList = 'main__message';
 
+                // let timestamp = message.timestamp.toDate()
+                let timestamp = message.timestamp;
+                // console.log('timestamp: ', timestamp);
+
+                function timeConverter(timestamp){
+                    let a = new Date(timestamp);
+                    let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                    let year = a.getYear()+1900;
+                    let month = months[a.getMonth()];
+                    // let month = '0' + a.getMonth();
+                    let date = a.getDate();
+                    let hour = a.getHours();
+                    let min = a.getMinutes();
+                    let sec = a.getUTCSeconds();
+
+                    function pad(n){return n<10 ? '0'+n : n}
+
+                    let time = pad(date) + ' ' + pad(month) + ' ' + year + ' ' + pad(hour) + ':' + pad(min) + ':' + pad(sec);
+                    return time;
+                  }
+                //   console.log(timeConverter(timestamp));
+
+                function name(){
+                    if (message.username != null) {
+                        return message.username;
+                    } else { 
+                        return message.email;
+                    }
+                }
+                
                 let h4 = document.createElement('h4');
-                h4.innerText = message.username;
+                h4.innerText = name() + ', ' + (timeConverter(timestamp.toMillis()));
                 h4.className = 'main__nickname';
 
                 let span = document.createElement('span');
@@ -55,34 +109,14 @@ class App {
         let userName = document.querySelector('.header__username');
         userName.hidden = false;
 
-        // let nickname = function(){
-        //     if (this.currentUser.displayName !== null) {
-        //         userName.innerText = this.currentUser.displayName;
-        //     } else {
-        //         return userName.innerText = this.currentUser.email;
-        //     }
-        // }
-
-        // nickname();
         userName.innerText = this.currentUser.displayName;
-         
+        console.log('this.currentUserGoogle: ', this.currentUser);
 
         let userPic = document.querySelector('.header__userpic');
         userPic.hidden = false;
         userPic.innerHTML = '';
 
         userPic.style.backgroundImage = `url(${this.currentUser.photoURL})`
-        
-        // let newUserPic = document.querySelector('.main__anonymouspic');
-        // let avatar = function() {
-        //     if (userPic.style.backgroundImage !== null) {
-        //         userPic.style.backgroundImage = `url(${this.currentUser.photoURL})`;
-        //     } else {
-        //         return userPic.style.backgroundImage = `url(${newUserPic.src})`
-        //     }
-        // }
-
-        // avatar();
 
         signInButton.hidden = true;
 
@@ -114,7 +148,8 @@ class App {
         let userName = document.querySelector('.header__username');
         userName.hidden = false;
 
-        userName.innerText = this.currentUser.email;
+        userName.innerText = '' + this.currentUser.email;
+        console.log('this.currentUser.email: ', this.currentUser.email);
         
 
         let userPic = document.querySelector('.header__userpic');
@@ -184,7 +219,7 @@ class App {
         this.currentUser = resultAuth.user;
         
         this.displayUserRegistered();
-        console.log(this.currentUser);
+        console.log('this.currentUser = resultAuth.user', this.currentUser);
     }
 
     signInWithEmailAndPassword = async () => {
@@ -240,25 +275,6 @@ class App {
     //     });
        
     // }
-
-    textMessage = (e) => {
-        console.log(e);
-        if (e.target.value) {
-            formButton.disabled = false;
-        } else {
-            formButton.disabled = true;
-        }  
-    }
-    sendMessage = (e) => {
-        e.preventDefault();
-
-        let messageBody = e.target[0].value;
-
-        this.db.collection('messages').add({
-            username: this.currentUser.displayName,
-            message: messageBody
-        })
-    }
 }
 
 let myChat = new App();
@@ -283,10 +299,12 @@ signOutButton.addEventListener('click', myChat.signOut);
 let message = document.querySelector('.main__input');
 let formButton = document.querySelector('.main__send');
 message.addEventListener('input', myChat.textMessage);
+console.log('textMessage', message.addEventListener('input', myChat.textMessage));
 
 // send msg
 let form = document.querySelector('.main__input-form');
 form.addEventListener('submit', myChat.sendMessage);
+console.log('sendMessage: ', form.addEventListener('submit', myChat.sendMessage));
 
 let currentUsersOnline = () => {
 
@@ -314,3 +332,11 @@ signInButton.addEventListener('click', popupWindow);
 // hide popup window
 let closePopupWindow = document.querySelector('.main__close');
 closePopupWindow.addEventListener('click', popupWindow);
+
+
+// function initFirebaseAuth() {
+//     // Listen to auth state changes.
+//     firebase.auth().onAuthStateChanged(authStateObserver);
+// }
+
+// initFirebaseAuth()

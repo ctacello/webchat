@@ -71,7 +71,7 @@
                     </div>
                 </div>
                 <div class="main__form">
-                    <select name="main__select">
+                    <select name="main__select-msgtype">
                         <option value="value1" selected>All</option> 
                         <option value="value2">Private</option>
                         <option value="value3">Team</option>
@@ -84,11 +84,26 @@
                     </form>
                 </div>
             </div>
-            <div class="main__users">
-                <h4 class="main__usersonline"></h4>
-                <div class="main__userslist"> <a class='main__userinfo' href="http://">[i]</a> <span>Username</span> <span>[Junior]</span></div>
-                <div class="main__userslist"> <a class='main__userinfo' href="http://">[i]</a> <span>Username2</span> <span>[DevTeam]</span></div>
-                <div class="main__userslist"> <a class='main__userinfo' href="http://">[i]</a> <span>Me</span> <span>[DevTeam]</span></div>
+            <div class="main__chatinfo">
+                <div class="main__chatrooms">
+                    <a class="main__chatrooms_button" href="#">
+                        <i class="icon"></i>
+                        Chat Rooms
+                        <span class="caret"></span>
+                    </a>
+                    <div class="main__chatrooms_dropdown-menu">
+                        <ul id="main__chatrooms_list"></ul>
+                        <div class="main__chatrooms_list-footer">
+                            <button type="button" class="main__chatrooms_addroom"">Create Room</button>
+                        </div>
+                </div>
+                </div>
+                <div class="main__users">
+                    <h4 class="main__usersonline"></h4>
+                    <div class="main__userslist"> <a class='main__userinfo' href="http://">[i]</a> <span>Username</span> <span>[Junior]</span></div>
+                    <div class="main__userslist"> <a class='main__userinfo' href="http://">[i]</a> <span>Username2</span> <span>[DevTeam]</span></div>
+                    <div class="main__userslist"> <a class='main__userinfo' href="http://">[i]</a> <span>Me</span> <span>[DevTeam]</span></div>
+                </div>
             </div>
         </div>
     </main>
