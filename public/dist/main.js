@@ -1,4 +1,3 @@
-// alert('hello!');
 class App {
     constructor () {
         this.currentUser = null;
@@ -46,7 +45,8 @@ class App {
             username: this.currentUser.displayName,
             email: this.currentUser.email,
             message: messageBody,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            // timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            timestamp: Date.now()
         })
     }
 
@@ -56,14 +56,13 @@ class App {
             let divMessage = document.createElement('div');
             divMessage.classList = 'main__message';
 
-                // let timestamp = message.timestamp.toDate()
-                let timestamp = message.timestamp;
-                // console.log('timestamp: ', timestamp);
+                let timestamp = new Date (message.timestamp);
+                console.log('timestamp: ', timestamp);
 
                 function timeConverter(timestamp){
-                    let a = new Date(timestamp);
+                    let a = new Date(timestamp * 1000);
                     let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-                    let year = a.getYear()+1900;
+                    let year = a.getFullYear();
                     let month = months[a.getMonth()];
                     // let month = '0' + a.getMonth();
                     let date = a.getDate();
@@ -73,10 +72,9 @@ class App {
 
                     function pad(n){return n<10 ? '0'+n : n}
 
-                    let time = pad(date) + ' ' + pad(month) + ' ' + year + ' ' + pad(hour) + ':' + pad(min) + ':' + pad(sec);
+                    let time = pad(date) + '.' + pad(month) + '.' + year + ' ' + pad(hour) + ':' + pad(min) + ':' + pad(sec);
                     return time;
                   }
-                //   console.log(timeConverter(timestamp));
 
                 function name(){
                     if (message.username != null) {
@@ -87,7 +85,10 @@ class App {
                 }
                 
                 let h4 = document.createElement('h4');
-                h4.innerText = name() + ', ' + (timeConverter(timestamp.toMillis()));
+                // h4.innerText = name() + ', ' + (timeConverter(timestamp.toMillis()));
+                // h4.innerText = name() + ', ' + (timeConverter(timestamp));
+                h4.innerText = name() + ', ' + timestamp.toLocaleString();
+
                 h4.className = 'main__nickname';
 
                 let span = document.createElement('span');
@@ -219,7 +220,7 @@ class App {
         this.currentUser = resultAuth.user;
         
         this.displayUserRegistered();
-        console.log('this.currentUser = resultAuth.user', this.currentUser);
+        
     }
 
     signInWithEmailAndPassword = async () => {
@@ -299,12 +300,10 @@ signOutButton.addEventListener('click', myChat.signOut);
 let message = document.querySelector('.main__input');
 let formButton = document.querySelector('.main__send');
 message.addEventListener('input', myChat.textMessage);
-console.log('textMessage', message.addEventListener('input', myChat.textMessage));
 
 // send msg
 let form = document.querySelector('.main__input-form');
 form.addEventListener('submit', myChat.sendMessage);
-console.log('sendMessage: ', form.addEventListener('submit', myChat.sendMessage));
 
 let currentUsersOnline = () => {
 
@@ -332,6 +331,17 @@ signInButton.addEventListener('click', popupWindow);
 // hide popup window
 let closePopupWindow = document.querySelector('.main__close');
 closePopupWindow.addEventListener('click', popupWindow);
+
+firebase.auth().onAuthStateChanged(function(firebaseUser) {
+    console.log('FirebaseUser: ', firebaseUser);
+    // window.user = user;
+    // console.log('window.user: ', window.user);
+
+
+    // Step 1:
+    //  If no user, sign in anonymously with firebase.auth().signInAnonymously()
+    //  If there is a user, log out out user details for debugging purposes.
+  });
 
 
 // function initFirebaseAuth() {
