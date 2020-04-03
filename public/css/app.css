@@ -285,7 +285,7 @@ h4 {
   text-shadow: 0 0 10px #ccc;
 }
 .main__message_margin {
-  margin-right: 20px;
+  margin-right: 40px;
 }
 .main__nickname {
   color: #5cfc5e;
@@ -308,6 +308,9 @@ h4 {
 .main__input-form {
   display: flex;
   justify-content: center;
+}
+.main__input {
+  width: 250px;
 }
 .main__chatinfo {
   background-color: #333;

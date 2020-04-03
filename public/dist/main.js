@@ -3,11 +3,92 @@ class App {
         this.currentUser = null;
         this.db = firebase.firestore();
 
+        this.initFirebaseAuth();
         this.initFirebaseListeners();
         this.messages = [];
+        this.users = [];
     }
 
-    initFirebaseListeners() {
+    initFirebaseAuth() {
+
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+
+                function SingInName(){
+                    if (user.displayName != null) {
+                        return user.displayName;
+                    } else { 
+                        return user.email;
+                    }
+                }
+
+                let signOutButton = document.querySelector('.header__signout');
+                signOutButton.hidden = false;
+
+                let userName = document.querySelector('.header__username');
+                userName.hidden = false;
+
+                userName.innerText = SingInName();
+
+                let userPic = document.querySelector('.header__userpic');
+                userPic.hidden = false;
+                userPic.innerHTML = '';
+
+                let newUserPic = document.querySelector('.main__anonymouspic');
+
+                function photoURL(){
+                    if (user.photoURL != null) {
+                        return user.photoURL;
+                    } else { 
+                        return newUserPic.src;
+                    }
+                }
+
+                userPic.style.backgroundImage = `url(${photoURL()})`
+
+                signInButton.hidden = true;
+
+                let userList = document.querySelector('.main__users');
+
+                    let usernameInUserList = document.createElement('div');
+                    usernameInUserList.className = 'main__userslist';
+
+                        let a = document.createElement('a');
+                        a.className = 'main__userinfo';
+                        a.href = 'http://';
+                        a.innerText = '[i]';
+
+                        let span = document.createElement('span');
+                        span.innerText = ' ' + SingInName();
+
+                    usernameInUserList.appendChild(a);
+                    usernameInUserList.appendChild(span);
+                    
+                userList.appendChild(usernameInUserList);
+
+                console.log("Signed in user!");
+
+                // popupWindow();
+              } else {
+                let signOutButton = document.querySelector('.header__signout');
+                signOutButton.hidden = true;
+        
+                let userName = document.querySelector('.header__username');
+                userName.hidden = true;
+        
+                let userPic = document.querySelector('.header__userpic');
+                userPic.hidden = true;
+        
+                signInButton.hidden = false;
+
+                console.log("User Sign out!");
+              }
+            console.log('FirebaseUser: ', user);
+
+        });
+    }
+
+        initFirebaseListeners() {
         let messageOrderByTime = this.db.collection('messages').orderBy('timestamp', 'asc');
         messageOrderByTime.onSnapshot((snapshot) => {
             snapshot.forEach(doc => {
@@ -19,15 +100,30 @@ class App {
                     this.messages.push(message);
                     this.displayMessage(message);
                 }
-                // console.log('Messages: ', 'messages');
-                // console.log('Message: ', message);
             })
         })
+
+        // let userOrderByName = this.db.collection('users');
+        // console.log('userOrderByName: ', userOrderByName);
+        // userOrderByName.onSnapshot((snapshot) => {
+        //     snapshot.forEach(doc => {
+        //         let user = doc.data();
+        //         user.id = doc.id;
+
+        //         if (!this.users.find(m => m.id == user.id)) {
+        //             this.users.push(user);
+        //             console.log('this.users: ', this.users);
+                    
+        //             this.displayUserRegistered(user);
+        //             console.log('this.displayUserRegistered(user): ', this.displayUserRegistered(user));
+        //         }
+        //      })
+
+        // })
     }
 
-    // получение сообщениея и активация кнопки для отправки
+    // получение сообщения и активация кнопки для отправки
     textMessage = (e) => {
-        // console.log(e);
         if (e.target.value) {
             formButton.disabled = false;
         } else {
@@ -44,37 +140,22 @@ class App {
         this.db.collection('messages').add({
             username: this.currentUser.displayName,
             email: this.currentUser.email,
+            uid: this.currentUser.uid,
             message: messageBody,
-            // timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            timestampServer: firebase.firestore.FieldValue.serverTimestamp(),
             timestamp: Date.now()
         })
     }
 
+    // отображение сообщения в чате
     displayMessage(message) {
+
         let messageStorage = document.querySelector('.main__messages');
 
             let divMessage = document.createElement('div');
             divMessage.classList = 'main__message';
 
                 let timestamp = new Date (message.timestamp);
-                console.log('timestamp: ', timestamp);
-
-                function timeConverter(timestamp){
-                    let a = new Date(timestamp * 1000);
-                    let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-                    let year = a.getFullYear();
-                    let month = months[a.getMonth()];
-                    // let month = '0' + a.getMonth();
-                    let date = a.getDate();
-                    let hour = a.getHours();
-                    let min = a.getMinutes();
-                    let sec = a.getUTCSeconds();
-
-                    function pad(n){return n<10 ? '0'+n : n}
-
-                    let time = pad(date) + '.' + pad(month) + '.' + year + ' ' + pad(hour) + ':' + pad(min) + ':' + pad(sec);
-                    return time;
-                  }
 
                 function name(){
                     if (message.username != null) {
@@ -85,8 +166,6 @@ class App {
                 }
                 
                 let h4 = document.createElement('h4');
-                // h4.innerText = name() + ', ' + (timeConverter(timestamp.toMillis()));
-                // h4.innerText = name() + ', ' + (timeConverter(timestamp));
                 h4.innerText = name() + ', ' + timestamp.toLocaleString();
 
                 h4.className = 'main__nickname';
@@ -101,181 +180,189 @@ class App {
         messageStorage.appendChild(divMessage);
     }
 
-    displayUserGoogle() {
-        popupWindow();
+    //показать авторизированного юзера через гугл
+    // displayUserGoogle() {
+    //     popupWindow();
 
-        let signOutButton = document.querySelector('.header__signout');
-        signOutButton.hidden = false;
+    //     let signOutButton = document.querySelector('.header__signout');
+    //     signOutButton.hidden = false;
 
-        let userName = document.querySelector('.header__username');
-        userName.hidden = false;
+    //     let userName = document.querySelector('.header__username');
+    //     userName.hidden = false;
 
-        userName.innerText = this.currentUser.displayName;
-        console.log('this.currentUserGoogle: ', this.currentUser);
+    //     userName.innerText = this.currentUser.displayName;
 
-        let userPic = document.querySelector('.header__userpic');
-        userPic.hidden = false;
-        userPic.innerHTML = '';
+    //     let userPic = document.querySelector('.header__userpic');
+    //     userPic.hidden = false;
+    //     userPic.innerHTML = '';
 
-        userPic.style.backgroundImage = `url(${this.currentUser.photoURL})`
+    //     userPic.style.backgroundImage = `url(${this.currentUser.photoURL})`
 
-        signInButton.hidden = true;
+    //     signInButton.hidden = true;
 
-        let userList = document.querySelector('.main__users');
+    //     let userList = document.querySelector('.main__users');
 
-            let usernameInUserList = document.createElement('div');
-            usernameInUserList.className = 'main_userlist';
+    //         let usernameInUserList = document.createElement('div');
+    //         usernameInUserList.className = 'main__userslist';
 
-                let a = document.createElement('a');
-                a.className = 'main__userinfo';
-                a.href = 'http://';
-                a.innerText = '[i]';
+    //             let a = document.createElement('a');
+    //             a.className = 'main__userinfo';
+    //             a.href = 'http://';
+    //             a.innerText = '[i]';
 
-                let span = document.createElement('span');
-                span.innerText = ' ' + this.currentUser.displayName;
+    //             let span = document.createElement('span');
+    //             span.innerText = ' ' + this.currentUser.displayName;
 
-            usernameInUserList.appendChild(a);
-            usernameInUserList.appendChild(span);
+    //         usernameInUserList.appendChild(a);
+    //         usernameInUserList.appendChild(span);
             
-        userList.appendChild(usernameInUserList);
-    }
+    //     userList.appendChild(usernameInUserList);
+    // }
 
-    displayUserRegistered() {
-        popupWindow();
+    //показать зарегистрированного юзера через почту и пароль
+    
+    // displayUserRegistered() {
+    //     popupWindow();
+        
+    //     let signOutButton = document.querySelector('.header__signout');
+    //     signOutButton.hidden = false;
 
-        let signOutButton = document.querySelector('.header__signout');
-        signOutButton.hidden = false;
+    //     let userName = document.querySelector('.header__username');
+    //     userName.hidden = false;
 
-        let userName = document.querySelector('.header__username');
-        userName.hidden = false;
-
-        userName.innerText = '' + this.currentUser.email;
-        console.log('this.currentUser.email: ', this.currentUser.email);
+    //     userName.innerText = '' + this.currentUser.email;
+    //     console.log('this.currentUser.email: ', this.currentUser.email);
+        
+    //     // userName.innerText = '' + user.email;
+    //     // console.log('user.email: ', user.email);
         
 
-        let userPic = document.querySelector('.header__userpic');
-        userPic.hidden = false;
-        userPic.innerHTML = '';
+    //     let userPic = document.querySelector('.header__userpic');
+    //     userPic.hidden = false;
+    //     userPic.innerHTML = '';
         
-        let newUserPic = document.querySelector('.main__anonymouspic');
-        userPic.style.backgroundImage = `url(${newUserPic.src})`
+    //     let newUserPic = document.querySelector('.main__anonymouspic');
+    //     userPic.style.backgroundImage = `url(${newUserPic.src})`
         
-        signInButton.hidden = true;
+    //     signInButton.hidden = true;
 
-        let userList = document.querySelector('.main__users');
+    //     let userList = document.querySelector('.main__users');
 
-            let usernameInUserList = document.createElement('div');
-            usernameInUserList.className = 'main_userlist';
+    //         let usernameInUserList = document.createElement('div');
+    //         usernameInUserList.className = 'main__userslist';
 
-                let a = document.createElement('a');
-                a.className = 'main__userinfo';
-                a.href = 'http://';
-                a.innerText = '[i]';
+    //             let a = document.createElement('a');
+    //             a.className = 'main__userinfo';
+    //             a.href = 'http://';
+    //             a.innerText = '[i]';
 
-                let span = document.createElement('span');
-                span.innerText = ' ' + this.currentUser.email;
+    //             let span = document.createElement('span');
+    //             span.innerText = ' ' + this.currentUser.email;
+    //             // span.innerText = ' ' + user.email;
 
-            usernameInUserList.appendChild(a);
-            usernameInUserList.appendChild(span);
+    //         usernameInUserList.appendChild(a);
+    //         usernameInUserList.appendChild(span);
             
-        userList.appendChild(usernameInUserList);
-    }
+    //     userList.appendChild(usernameInUserList);
+    // }
 
-    signOutUser() {
-        let signOutButton = document.querySelector('.header__signout');
-        signOutButton.hidden = true;
-
-        let userName = document.querySelector('.header__username');
-        userName.hidden = true;
-
-        let userPic = document.querySelector('.header__userpic');
-        userPic.hidden = true;
-
-        signInButton.hidden = false;
-    }
-
+    //авторизация через гугл
+    
     signInWithGoogle = async () => {
         let provider = new firebase.auth.GoogleAuthProvider();
         let resultAuth = await firebase.auth().signInWithPopup(provider);
-        // console.log(resultAuth);
+
         this.currentUser = resultAuth.user;
 
-        this.displayUserGoogle();
+        this.addUserToDB(this.currentUser);
+        popupWindow();
+    }
+    
+    //добавление пользователя в базуданных
+    addUserToDB = (u) => {
+
+        let username = u.displayName;
+        console.log('username: ', username);
+        console.log('this.db.collection: ', this.db.collection);
+
+        this.db.collection('users').add({
+            username: username,
+            email: this.currentUser.email,
+            uid: this.currentUser.uid,
+            photoURL: this.currentUser.photoURL,
+            timestampServer: firebase.firestore.FieldValue.serverTimestamp()
+        })
     }
 
+    //регистрация через пароль и почту
     registerUser = async () => {
-
+        
         let email = document.querySelector('.main__email').value;
         let password = document.querySelector('.main__password').value;
-
+        
         let resultAuth = await firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-            // Handle Errors here.
-            var errorCode = error.code;
+            let errorCode = error.code;
             console.log('Create user errorCode: ', errorCode);
-            var errorMessage = error.message;
+            let errorMessage = error.message;
             console.log('Create user errorMessage: ', errorMessage);
-            // ...
-          });
+            if (errorMessage == 'The email address is badly formatted.') {
+                alert('Введите адрес электронной почты для регистрации')
+            }
+            if (errorMessage == 'Password should be at least 6 characters'){
+                alert('ОШИБКА: Пароль должен содержать не менее 6 символов!!!')
+            }
+            if (errorMessage == 'The password must be 6 characters long or more.') {
+                alert('ОШИБКА: Вы не ввели пароль!!!')
+            }
+
+        });
         
         this.currentUser = resultAuth.user;
-        
-        this.displayUserRegistered();
+
+        this.addUserToDB(this.currentUser);
+        // this.displayUserRegistered();
         
     }
-
+    
+    //авторизация через пароль и почту
     signInWithEmailAndPassword = async () => {
-
+        
         let email = document.querySelector('.main__email').value;
         let password = document.querySelector('.main__password').value;
-
+        
         let resultAuth = await firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-            // Handle Errors here.
             var errorCode = error.code;
             console.log('Login errorCode: ', errorCode);
             var errorMessage = error.message;
             console.log('Login errorMessage: ', errorMessage);
-            // ...
         });
 
-        console.log('resultAuth: ', resultAuth);
         this.currentUser = resultAuth.user;
-        console.log('this.currentUser: ', this.currentUser);
-
-        this.displayUserRegistered();
-        console.log(resultAuth);
+        popupWindow();
+        
+        // this.displayUserRegistered();
     }
 
+    //выход
+    // signOutUser() {
+    //     let signOutButton = document.querySelector('.header__signout');
+    //     signOutButton.hidden = true;
+
+    //     let userName = document.querySelector('.header__username');
+    //     userName.hidden = true;
+
+    //     let userPic = document.querySelector('.header__userpic');
+    //     userPic.hidden = true;
+
+    //     signInButton.hidden = false;
+    // }
+
+    // выход
     signOut = () => {
         firebase.auth().signOut();
-        this.signOutUser();
+        // this.signOutUser();
     }
 
-    // попытка сделать сессию сохраняемой
-
-    // signIn = () => {
-    //     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
-    //     .then(async () => {
-    //         let provider = new firebase.auth.GoogleAuthProvider();
-    //         let resultAuth = await firebase.auth().signInWithPopup(provider);
-
-    //         this.currentUser = resultAuth.user;
-            
-    //         console.log(this);
-    //         console.log(this.currentUser);
-
-    //         this.displayUser();
-
-    //     return resultAuth;
-    //     })
-    //     .catch(function(error) {
-    //         // Handle Errors here.
-    //         let errorCode = error.code;
-    //         let errorMessage = error.message;
-    //         console.log(errorCode);
-    //         console.log(errorMessage);
-    //     });
-       
-    // }
 }
 
 let myChat = new App();
@@ -305,19 +392,7 @@ message.addEventListener('input', myChat.textMessage);
 let form = document.querySelector('.main__input-form');
 form.addEventListener('submit', myChat.sendMessage);
 
-let currentUsersOnline = () => {
-
-    let usersOnline = document.querySelector('.main__usersonline');
-
-        let number = document.querySelectorAll('.main__userslist').length;
-
-    usersOnline.innerHTML = 'Current users online: ' + number;
-}
-
-currentUsersOnline();
-
 // popup window
-
 let popupWindow = function(){
     document.querySelector('.main__popup').classList.toggle('main__popup_display-none');
     document.querySelector('.main__popup').classList.toggle('main__popup_display-flex');
@@ -332,21 +407,14 @@ signInButton.addEventListener('click', popupWindow);
 let closePopupWindow = document.querySelector('.main__close');
 closePopupWindow.addEventListener('click', popupWindow);
 
-firebase.auth().onAuthStateChanged(function(firebaseUser) {
-    console.log('FirebaseUser: ', firebaseUser);
-    // window.user = user;
-    // console.log('window.user: ', window.user);
+currentUsersOnline = () => {
 
+    let usersOnline = document.querySelector('.main__usersonline');
+        let number = document.querySelectorAll('.main__userslist').length;
 
-    // Step 1:
-    //  If no user, sign in anonymously with firebase.auth().signInAnonymously()
-    //  If there is a user, log out out user details for debugging purposes.
-  });
+    usersOnline.innerHTML = 'Current users online: ' + number;
 
+    return number;
+}
 
-// function initFirebaseAuth() {
-//     // Listen to auth state changes.
-//     firebase.auth().onAuthStateChanged(authStateObserver);
-// }
-
-// initFirebaseAuth()
+currentUsersOnline()
