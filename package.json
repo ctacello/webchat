@@ -1,0 +1,30 @@
+{
+  "name": "webchat",
+  "version": "1.0.0",
+  "description": "Corporative Multifunctional WebChat",
+  "main": "webpack.config.js",
+  "dependencies": {
+    "firebase": "^7.12.0",
+    "node": "^13.11.0",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ctacello/webchat.git"
+  },
+  "keywords": [
+    "Corporative",
+    "WebChat"
+  ],
+  "author": "ctacello for ItSchool",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ctacello/webchat/issues"
+  },
+  "homepage": "https://github.com/ctacello/webchat#readme"
+}

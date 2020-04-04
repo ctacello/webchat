@@ -1,0 +1,43 @@
+[debug] [2020-03-28T23:14:15.173Z] ----------------------------------------------------------------------
+[debug] [2020-03-28T23:14:15.176Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\ctacello\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve
+[debug] [2020-03-28T23:14:15.176Z] CLI Version:   7.16.1
+[debug] [2020-03-28T23:14:15.176Z] Platform:      win32
+[debug] [2020-03-28T23:14:15.176Z] Node Version:  v13.6.0
+[debug] [2020-03-28T23:14:15.177Z] Time:          Sun Mar 29 2020 01:14:15 GMT+0200 (за східноєвропейським стандартним часом)
+[debug] [2020-03-28T23:14:15.177Z] ----------------------------------------------------------------------
+[debug] [2020-03-28T23:14:15.177Z] 
+[debug] [2020-03-28T23:14:15.191Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-03-28T23:14:15.192Z] > authorizing via signed-in user
+[debug] [2020-03-28T23:14:15.192Z] [iam] checking project corporative-webchat for permissions ["firebase.projects.get"]
+[debug] [2020-03-28T23:14:15.194Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-03-28T23:14:15.194Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-03-28T23:14:15.387Z] <<< HTTP RESPONSE 200
+[debug] [2020-03-28T23:14:15.398Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/corporative-webchat:testIamPermissions  
+
+[debug] [2020-03-28T23:14:16.388Z] <<< HTTP RESPONSE 200
+[debug] [2020-03-28T23:14:16.390Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/corporative-webchat  
+ 
+[debug] [2020-03-28T23:14:16.746Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'L:\IT_School\webchat'...
+[info] 
+[debug] [2020-03-28T23:14:16.751Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/corporative-webchat/webApps/-/config  
+ 
+[debug] [2020-03-28T23:14:17.631Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: public
+[info] +  hosting: Local server: http://localhost:5000
+[warn] !  Your requested "node" version "8" doesn't match your global version "13"
+[info] +  functions: functions emulator started at http://localhost:5001
+[info] i  functions: Watching "L:\IT_School\webchat\functions" for Cloud Functions...
+[debug] [2020-03-28T23:14:18.793Z] [worker-pool] addWorker(~diagnostic~)
+[debug] [2020-03-28T23:14:18.794Z] [worker-pool] Adding worker with key ~diagnostic~, total=1
+[debug] [2020-03-28T23:14:18.794Z] [worker-pool] submitWork(triggerId=)
+[debug] [2020-03-28T23:14:18.794Z] [worker-~diagnostic~-713037d1-3e74-4f77-b339-2d82940fb70d]: Assigning socketPath: \\?\pipe\L:\IT_School\webchat\functions\7264
+[debug] [2020-03-28T23:14:18.795Z] [worker-~diagnostic~-713037d1-3e74-4f77-b339-2d82940fb70d]: BUSY
+[debug] [2020-03-28T23:14:19.156Z] [runtime-status] [7264] Functions runtime initialized. {"cwd":"L:\\IT_School\\webchat\\functions","node_version":"13.6.0"}
+[debug] [2020-03-28T23:14:19.157Z] [runtime-status] [7264] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"admin_stubs":true,"pubsub_emulator":true}
+[debug] [2020-03-28T23:14:19.174Z] [runtime-status] [7264] Resolved module firebase-admin {"declared":true,"installed":true,"version":"8.10.0","resolution":"L:\\IT_School\\webchat\\functions\\node_modules\\firebase-admin\\lib\\index.js"}
+[debug] [2020-03-28T23:14:19.187Z] [runtime-status] [7264] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.5.0","resolution":"L:\\IT_School\\webchat\\functions\\node_modules\\firebase-functions\\lib\\index.js"}
+[debug] [2020-03-28T23:14:19.189Z] [runtime-status] [7264] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.5.0","resolution":"L:\\IT_School\\webchat\\functions\\node_modules\\firebase-functions\\lib\\index.js"}
+[debug] [2020-03-28T23:14:19.427Z] [worker-~diagnostic~-713037d1-3e74-4f77-b339-2d82940fb70d]: IDLE
