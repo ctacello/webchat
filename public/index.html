@@ -49,16 +49,21 @@
         <div class="main__container">
             <div class="main__chat">
                 <div class="main__messages">
-                    <div class="main__message main__message_margin">
-                        <div class="main__text">
+                    <div class="main__message main__message_margin" data-id="xli1FSnO7ZfcqcaSmnaE">
+                        <div class="main__message_text">
                             <h4 class="main__nickname">Username</h4>
                             <span class="main__text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+                            <div class="main__message_options">
+                                <span class="edit">Edit</span>
+                                <span class="quote">Quote</span>
+                                <span class="delete" data-id="xli1FSnO7ZfcqcaSmnaE">Delete</span>
+                            </div>
                         </div>
-                        <div class="main__texticons">
+                        <!-- <div class="main__texticons">
                                 <img src="media/msg-edit.png" alt="Edit message">
                                 <img src="media/msg-quote.png" alt="Quote message">
                                 <img src="media/msg-del.png" alt="Delete message">
-                        </div>
+                        </div> -->
                     </div>
                     <div class="main__message main__message_margin">
                         <h4 class="main__nickname">Username2 > Me</h4>
@@ -78,18 +83,24 @@
                     </div>
                 </div>
                 <div class="main__form">
-                    <select name="main__select-msgtype">
-                        <option value="value1" selected>All</option> 
-                        <option value="value2">Private</option>
-                        <option value="value3">Team</option>
-                    </select>
-                    <input id="nickname" type="text" placeholder="Ник пользователя" class="main__usernickname">
-                
-                    <form class="main__input-form" autocomplete="off">
-                        <input id="message" type="text" placeholder="Ваше сообщение" class="main__input">
-                        <!-- <button id="submit" disabled type="submit" class="main__send">SEND</button> -->
-                        <input type="submit" value="SEND" class="main__send" disabled>
-                    </form>
+                    <div class="main__unregistered main__unregistered_display-flex">
+                        Чтобы написать в чат, необходимо авторизоваться!
+                    </div>
+                    <div class="main__chatinput main__chatinput_display-none">
+                        <select name="main__select-msgtype">
+                            <option value="value1" selected>All</option> 
+                            <option value="value2">Private</option>
+                            <option value="value3">Team</option>
+                        </select>
+                        <input name="nickname" type="text" placeholder="Ник пользователя" class="main__usernickname">
+                    
+                        <form class="main__input-form" autocomplete="off">
+                            <input type="text" placeholder="Ваше сообщение" class="main__input">
+                            <!-- <textarea name="text" cols="30" rows="10" placeholder="Ваше сообщение" class="main__input"></textarea> -->
+                            <!-- <div placeholder="Ваше сообщение" class="main__input" contenteditable="true"></div> -->
+                            <input type="submit" value="SEND" class="main__send" disabled>
+                        </form>
+                    </div>
                 </div>
             </div>
             <div class="main__chatinfo">
@@ -108,9 +119,27 @@
                 </div>
                 <div class="main__users">
                     <h4 class="main__usersonline"></h4>
-                    <div class="main__userslist"> <a class='main__userinfo' href="http://">[i]</a> <span>Username</span> <span>[Junior]</span></div>
-                    <div class="main__userslist"> <a class='main__userinfo' href="http://">[i]</a> <span>Username2</span> <span>[DevTeam]</span></div>
-                    <div class="main__userslist"> <a class='main__userinfo' href="http://">[i]</a> <span>Me</span> <span>[DevTeam]</span></div>
+                    <div class="main__usersonline_prototype">
+                        <div class="prototype">This is prototype</div>
+                        <div class="main__userslist"> 
+                            <div class="main__userstatus_green"></div> 
+                            <a class='main__userinfo' href="http://">[i]</a> 
+                            <span>Username</span> 
+                            <span>[Junior]</span>
+                        </div>
+                        <div class="main__userslist"> 
+                            <div class="main__userstatus_red"></div> 
+                            <a class='main__userinfo' href="http://">[i]</a> 
+                            <span>Username2</span> 
+                            <span>[DevTeam]</span>
+                        </div>
+                        <div class="main__userslist"> 
+                            <div class="main__userstatus_yellow"></div> 
+                            <a class='main__userinfo' href="http://">[i]</a> 
+                            <span>Me</span> 
+                            <span>[DevTeam]</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -129,5 +158,19 @@
     <!-- Initialize Firebase -->
     <script src="/__/firebase/init.js"></script>
     <script src="dist/main.js"></script>
+    <!-- <script>
+        let getUserName = document.querySelector('.main__nickname');
+        let first = true;
+
+        function inputUserName (currentUsername) {
+            let putUserName = document.querySelector('.main__usernickname');
+            let input = putUserName.value + ', ';
+            if (first) {
+                first = false;
+                input = "";
+                }
+                putUserName.value = input + currentUsername.innerHTML;
+        }
+    </script> -->
 </body>
 </html>

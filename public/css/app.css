@@ -115,6 +115,15 @@ h4 {
   margin: 5px;
 }
 
+.prototype {
+  text-align: center;
+  color: red;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black, 0px 0px 10px #ccc;
+  font-size: 20px;
+}
+
 .main {
   display: flex;
   justify-content: center;
@@ -272,11 +281,34 @@ h4 {
   background-color: #616161;
   margin-bottom: 10px;
   padding: 10px;
-  display: inline-block;
+  display: inline-flex;
+  flex-direction: column;
   transition: all 0.3s ease;
+}
+.main__message_text {
+  display: inline-flex;
+  flex-direction: column;
+}
+.main__message_options {
+  text-align: right;
+  font-size: 15px;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.main__message_options span {
+  cursor: pointer;
+}
+.main__message_options span:hover {
+  color: #2ba3e2;
+  text-shadow: 0 0 11px #000;
 }
 .main__message:hover {
   background-color: #737373;
+}
+.main__message:hover .main__message_options {
+  display: block;
+  opacity: 1;
 }
 .main__message span {
   color: #fff;
@@ -290,6 +322,9 @@ h4 {
 .main__nickname {
   color: #5cfc5e;
   line-height: 1.15;
+  cursor: pointer;
+  display: inline-flex;
+  align-self: flex-start;
 }
 .main__me {
   align-self: flex-end;
@@ -304,6 +339,28 @@ h4 {
 .main__form {
   display: flex;
   justify-content: center;
+  height: 25px;
+}
+.main__unregistered {
+  text-align: center;
+  color: red;
+  font-weight: bold;
+  text-shadow: 0px 0px 16px black;
+}
+.main__unregistered_display-none {
+  display: none;
+}
+.main__unregistered_display-flex {
+  display: flex;
+}
+.main__chatinput {
+  justify-content: center;
+}
+.main__chatinput_display-none {
+  display: none;
+}
+.main__chatinput_display-flex {
+  display: flex;
 }
 .main__input-form {
   display: flex;
@@ -316,8 +373,9 @@ h4 {
   background-color: #333;
   display: inline-flex;
   flex-direction: column;
-  padding: 10px;
   flex-basis: 30%;
+  overflow: auto;
+  height: 100%;
 }
 .main__chatrooms {
   display: inline-flex;
@@ -332,6 +390,7 @@ h4 {
   border-radius: 4px;
   width: 60%;
   padding: 5px;
+  margin-top: 10px;
   cursor: pointer;
   box-shadow: 0 0 5px #ccc;
 }
@@ -356,6 +415,9 @@ h4 {
   display: none;
 }
 .main__users {
+  height: 100%;
+  display: inline-flex;
+  flex-direction: column;
   background-color: #333;
   margin: 10px;
   color: #fff;
@@ -365,9 +427,43 @@ h4 {
 .main__usersonline {
   text-align: center;
   margin-bottom: 25px;
+  color: #ffc100;
+}
+.main__usersonline_prototype {
+  display: inline-flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: flex-end;
 }
 .main__userslist {
   margin-bottom: 5px;
+}
+.main__userstatus_green {
+  width: 18px;
+  height: 18px;
+  border: 1px solid white;
+  border-radius: 50%;
+  background-color: green;
+  display: inline-block;
+  vertical-align: middle;
+}
+.main__userstatus_red {
+  width: 18px;
+  height: 18px;
+  border: 1px solid white;
+  border-radius: 50%;
+  background-color: red;
+  display: inline-block;
+  vertical-align: middle;
+}
+.main__userstatus_yellow {
+  width: 18px;
+  height: 18px;
+  border: 1px solid white;
+  border-radius: 50%;
+  background-color: yellow;
+  display: inline-block;
+  vertical-align: middle;
 }
 .main__userinfo {
   color: #fff;

@@ -66,6 +66,19 @@ h4 {
     margin: 5px;
 }
 
+.prototype {
+    text-align: center;
+    color: red;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-shadow: -1px 0 black, 
+                0 1px black, 
+                1px 0 black, 
+                0 -1px black, 
+                0px 0px 10px #ccc;
+    font-size: 20px;
+}
+
 .main {
     display: flex;
     justify-content: center;
@@ -245,12 +258,39 @@ h4 {
         background-color: #616161;
         margin-bottom: 10px;
         padding: 10px;
-        display: inline-block;
-        // border-radius: 15px;
+        display: inline-flex;
+        flex-direction: column;
         transition:all 0.3s ease;
+
+        &_text {
+            display: inline-flex;
+            flex-direction: column;
+        }
+
+        &_options {
+            text-align: right;
+            font-size: 15px;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+
+            span {
+                cursor: pointer;
+
+                &:hover {
+                    color: #2ba3e2;
+                    text-shadow: 0 0 11px #000;
+                }
+            }
+        }
 
         &:hover {
             background-color: #737373;
+
+            .main__message_options {
+                display: block;
+                opacity: 1;
+            }
         }
 
         span { 
@@ -265,13 +305,13 @@ h4 {
         }
     }
 
-    // &__text::before {
-    //     content: '>_ ';
-    // }
 
     &__nickname {
         color: #5cfc5e;
         line-height: 1.15;
+        cursor: pointer;
+        display: inline-flex;
+        align-self: flex-start;
     }
 
     &__me {
@@ -290,6 +330,34 @@ h4 {
     &__form {
         display: flex;
         justify-content: center;
+        height: 25px;
+    }
+
+    &__unregistered {
+        text-align: center;
+        color: red;
+        font-weight: bold;
+        text-shadow: 0px 0px 16px black;
+
+        &_display-none {
+            display: none;
+        }
+
+        &_display-flex {
+            display: flex;
+        }
+    }
+
+    &__chatinput {
+        justify-content: center;
+
+        &_display-none {
+            display: none;
+        }
+
+        &_display-flex {
+            display: flex;
+        }
     }
 
     &__input-form {
@@ -305,8 +373,9 @@ h4 {
         background-color: #333;
         display: inline-flex;
         flex-direction: column;
-        padding: 10px;
         flex-basis: 30%;
+        overflow: auto;
+        height: 100%;
     }
 
     &__chatrooms {
@@ -322,6 +391,7 @@ h4 {
         border-radius: 4px;
         width: 60%;
         padding: 5px;
+        margin-top: 10px;
         cursor: pointer;
         box-shadow: 0 0 5px #ccc;
 
@@ -352,7 +422,9 @@ h4 {
     }
 
     &__users {
-        // flex-basis: 30%;
+        height: 100%;
+        display: inline-flex;
+        flex-direction: column;
         background-color: #333;
         margin: 10px;
         color: #fff;
@@ -363,10 +435,48 @@ h4 {
     &__usersonline {
         text-align: center;
         margin-bottom: 25px;
+        color: #ffc100;
+
+        &_prototype {
+            display: inline-flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: flex-end;
+        }
     }
 
     &__userslist {
         margin-bottom: 5px;
+    }
+
+    &__userstatus_green {
+        width: 18px;
+        height: 18px;
+        border: 1px solid white;
+        border-radius: 50%;
+        background-color: green;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    &__userstatus_red {
+        width: 18px;
+        height: 18px;
+        border: 1px solid white;
+        border-radius: 50%;
+        background-color: red;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    &__userstatus_yellow {
+        width: 18px;
+        height: 18px;
+        border: 1px solid white;
+        border-radius: 50%;
+        background-color: yellow;
+        display: inline-block;
+        vertical-align: middle;
     }
 
     &__userinfo {

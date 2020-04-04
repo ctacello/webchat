@@ -48,27 +48,9 @@ class App {
 
                 signInButton.hidden = true;
 
-                let userList = document.querySelector('.main__users');
-
-                    let usernameInUserList = document.createElement('div');
-                    usernameInUserList.className = 'main__userslist';
-
-                        let a = document.createElement('a');
-                        a.className = 'main__userinfo';
-                        a.href = 'http://';
-                        a.innerText = '[i]';
-
-                        let span = document.createElement('span');
-                        span.innerText = ' ' + SingInName();
-
-                    usernameInUserList.appendChild(a);
-                    usernameInUserList.appendChild(span);
-                    
-                userList.appendChild(usernameInUserList);
-
                 console.log("Signed in user!");
 
-                // popupWindow();
+                unregisteredMessage();
               } else {
                 let signOutButton = document.querySelector('.header__signout');
                 signOutButton.hidden = true;
@@ -82,44 +64,41 @@ class App {
                 signInButton.hidden = false;
 
                 console.log("User Sign out!");
+
+                unregisteredMessage();
               }
             console.log('FirebaseUser: ', user);
 
         });
     }
 
-        initFirebaseListeners() {
+    initFirebaseListeners() {
         let messageOrderByTime = this.db.collection('messages').orderBy('timestamp', 'asc');
         messageOrderByTime.onSnapshot((snapshot) => {
             snapshot.forEach(doc => {
-
                 let message = doc.data();
                 message.id = doc.id;
-
                 if (!this.messages.find(m => m.id == message.id)) {
                     this.messages.push(message);
                     this.displayMessage(message);
                 }
             })
         })
-
-        // let userOrderByName = this.db.collection('users');
-        // console.log('userOrderByName: ', userOrderByName);
-        // userOrderByName.onSnapshot((snapshot) => {
-        //     snapshot.forEach(doc => {
-        //         let user = doc.data();
-        //         user.id = doc.id;
-
-        //         if (!this.users.find(m => m.id == user.id)) {
-        //             this.users.push(user);
-        //             console.log('this.users: ', this.users);
-                    
-        //             this.displayUserRegistered(user);
-        //             console.log('this.displayUserRegistered(user): ', this.displayUserRegistered(user));
-        //         }
-        //      })
-
-        // })
+    let userOrderByName = this.db.collection('users');
+    // console.log('userOrderByName: ', userOrderByName);
+    userOrderByName.onSnapshot((snapshot) => {
+        snapshot.forEach(doc => {
+            let user = doc.data();
+            // console.log('doc.data(): ', doc.data());
+            user.id = doc.id;
+            // console.log('doc.id: ', doc.id);
+            if (!this.users.find(m => m.id == user.id)) {
+                this.users.push(user);
+                // console.log('this.users: ', this.users);
+                this.displayUsersOnline(user);
+            }
+         })
+    })
     }
 
     // получение сообщения и активация кнопки для отправки
@@ -147,6 +126,41 @@ class App {
         })
     }
 
+    //удаление сообщения с сервера и страницы, ТОЛЬКО АДМИН
+    deleteMessage = (e) => {
+        if (e.target.className != 'delete') return;
+    
+        let messageId = e.target.dataset.id;
+        console.log('messageId: ', messageId);
+        this.db.collection("messages").doc(`${messageId}`).delete()
+        .then(function() {
+            console.log("Document successfully deleted!");
+        }).catch(function(error) {
+            console.error("Error removing document: ", error);
+        });
+        let message = event.target.closest('.main__message');
+        message.remove();
+    }
+
+    //вставка имени в поле чата
+    inputNickname = (e) => {
+        if (e.target.className != 'main__nickname') return;
+        let first = true;
+        inputQueue(e);
+       
+        function inputQueue (e) {
+            let putUserName = document.getElementsByName('nickname')[0];
+            let input = putUserName.value + ', ';
+            if (first) {
+                first = false;
+                input = "";
+            }
+            putUserName.value = input + e.target.innerText;
+        }
+        
+        return false;
+    }
+    
     // отображение сообщения в чате
     displayMessage(message) {
 
@@ -155,135 +169,84 @@ class App {
             let divMessage = document.createElement('div');
             divMessage.classList = 'main__message';
 
-                let timestamp = new Date (message.timestamp);
+                let divText = document.createElement('div');
+                divText.className = 'main__message_text';
 
-                function name(){
-                    if (message.username != null) {
-                        return message.username;
-                    } else { 
-                        return message.email;
+                    let timestamp = new Date (message.timestamp);
+
+                    function name(){
+                        if (message.username != null) {
+                            return message.username;
+                        } else { 
+                            return message.email;
+                        }
                     }
-                }
-                
-                let h4 = document.createElement('h4');
-                h4.innerText = name() + ', ' + timestamp.toLocaleString();
+                    
+                    let h4 = document.createElement('h4');
+                    h4.innerText = name() + ', ' + timestamp.toLocaleString();
 
-                h4.className = 'main__nickname';
+                    h4.className = 'main__nickname';
+                    
+                    let span = document.createElement('span');
+                    span.innerText = message.message;
+                    span.className = 'main__text';
 
-                let span = document.createElement('span');
-                span.innerText = message.message;
-                span.className = 'main__text';
+                    let options = document.createElement('div');
+                    options.className = 'main__message_options';
 
-                divMessage.appendChild(h4);
-                divMessage.appendChild(span);
-        
+                        let edit = document.createElement('span');
+                        edit.className = 'edit';
+                        edit.innerText = 'Edit';
+                        let quote = document.createElement('span');
+                        quote.className = 'quote';
+                        quote.innerText = ' Quote';
+                        let del = document.createElement('span');
+                        del.className = 'delete';
+                        del.innerText = ' Delete';
+                        del.dataset.id = message.id;
+                    
+                    options.appendChild(edit);   
+                    options.appendChild(quote);
+                    options.appendChild(del);
+                divText.appendChild(h4);
+                divText.appendChild(span);
+                divText.appendChild(options);
+            divMessage.appendChild(divText);
         messageStorage.appendChild(divMessage);
     }
 
-    //показать авторизированного юзера через гугл
-    // displayUserGoogle() {
-    //     popupWindow();
+    displayUsersOnline(user) {
+        let userList = document.querySelector('.main__users');
 
-    //     let signOutButton = document.querySelector('.header__signout');
-    //     signOutButton.hidden = false;
+                    let usernameInUserList = document.createElement('div');
+                    usernameInUserList.className = 'main__userslist';
 
-    //     let userName = document.querySelector('.header__username');
-    //     userName.hidden = false;
+                        let a = document.createElement('a');
+                        a.className = 'main__userinfo';
+                        a.href = 'http://';
+                        a.innerText = '[i]';
+                        
+                        function name(){
+                            if (user.username != null) {
+                                return user.username;
+                            } else { 
+                                return user.email;
+                            }
+                        }
 
-    //     userName.innerText = this.currentUser.displayName;
+                        let span = document.createElement('span');
+                        span.innerText = ' ' + name();
 
-    //     let userPic = document.querySelector('.header__userpic');
-    //     userPic.hidden = false;
-    //     userPic.innerHTML = '';
-
-    //     userPic.style.backgroundImage = `url(${this.currentUser.photoURL})`
-
-    //     signInButton.hidden = true;
-
-    //     let userList = document.querySelector('.main__users');
-
-    //         let usernameInUserList = document.createElement('div');
-    //         usernameInUserList.className = 'main__userslist';
-
-    //             let a = document.createElement('a');
-    //             a.className = 'main__userinfo';
-    //             a.href = 'http://';
-    //             a.innerText = '[i]';
-
-    //             let span = document.createElement('span');
-    //             span.innerText = ' ' + this.currentUser.displayName;
-
-    //         usernameInUserList.appendChild(a);
-    //         usernameInUserList.appendChild(span);
-            
-    //     userList.appendChild(usernameInUserList);
-    // }
-
-    //показать зарегистрированного юзера через почту и пароль
-    
-    // displayUserRegistered() {
-    //     popupWindow();
-        
-    //     let signOutButton = document.querySelector('.header__signout');
-    //     signOutButton.hidden = false;
-
-    //     let userName = document.querySelector('.header__username');
-    //     userName.hidden = false;
-
-    //     userName.innerText = '' + this.currentUser.email;
-    //     console.log('this.currentUser.email: ', this.currentUser.email);
-        
-    //     // userName.innerText = '' + user.email;
-    //     // console.log('user.email: ', user.email);
-        
-
-    //     let userPic = document.querySelector('.header__userpic');
-    //     userPic.hidden = false;
-    //     userPic.innerHTML = '';
-        
-    //     let newUserPic = document.querySelector('.main__anonymouspic');
-    //     userPic.style.backgroundImage = `url(${newUserPic.src})`
-        
-    //     signInButton.hidden = true;
-
-    //     let userList = document.querySelector('.main__users');
-
-    //         let usernameInUserList = document.createElement('div');
-    //         usernameInUserList.className = 'main__userslist';
-
-    //             let a = document.createElement('a');
-    //             a.className = 'main__userinfo';
-    //             a.href = 'http://';
-    //             a.innerText = '[i]';
-
-    //             let span = document.createElement('span');
-    //             span.innerText = ' ' + this.currentUser.email;
-    //             // span.innerText = ' ' + user.email;
-
-    //         usernameInUserList.appendChild(a);
-    //         usernameInUserList.appendChild(span);
-            
-    //     userList.appendChild(usernameInUserList);
-    // }
-
-    //авторизация через гугл
-    
-    signInWithGoogle = async () => {
-        let provider = new firebase.auth.GoogleAuthProvider();
-        let resultAuth = await firebase.auth().signInWithPopup(provider);
-
-        this.currentUser = resultAuth.user;
-
-        this.addUserToDB(this.currentUser);
-        popupWindow();
+                    usernameInUserList.appendChild(a);
+                    usernameInUserList.appendChild(span);
+                    
+            userList.prepend(usernameInUserList);
     }
-    
-    //добавление пользователя в базуданных
+
+    //добавление пользователя в базу данных
     addUserToDB = (u) => {
 
         let username = u.displayName;
-        console.log('username: ', username);
-        console.log('this.db.collection: ', this.db.collection);
 
         this.db.collection('users').add({
             username: username,
@@ -294,6 +257,17 @@ class App {
         })
     }
 
+    //авторизация через гугл
+    signInWithGoogle = async () => {
+        let provider = new firebase.auth.GoogleAuthProvider();
+        let resultAuth = await firebase.auth().signInWithPopup(provider);
+
+        this.currentUser = resultAuth.user;
+
+        this.addUserToDB(this.currentUser);
+        popupWindow();
+    }
+    
     //регистрация через пароль и почту
     registerUser = async () => {
         
@@ -319,9 +293,7 @@ class App {
         
         this.currentUser = resultAuth.user;
 
-        this.addUserToDB(this.currentUser);
-        // this.displayUserRegistered();
-        
+        this.addUserToDB(this.currentUser); 
     }
     
     //авторизация через пароль и почту
@@ -339,30 +311,11 @@ class App {
 
         this.currentUser = resultAuth.user;
         popupWindow();
-        
-        // this.displayUserRegistered();
     }
 
-    //выход
-    // signOutUser() {
-    //     let signOutButton = document.querySelector('.header__signout');
-    //     signOutButton.hidden = true;
-
-    //     let userName = document.querySelector('.header__username');
-    //     userName.hidden = true;
-
-    //     let userPic = document.querySelector('.header__userpic');
-    //     userPic.hidden = true;
-
-    //     signInButton.hidden = false;
-    // }
-
-    // выход
     signOut = () => {
         firebase.auth().signOut();
-        // this.signOutUser();
     }
-
 }
 
 let myChat = new App();
@@ -383,7 +336,7 @@ logInButtonGoogle.addEventListener('click', myChat.signInWithGoogle);
 let signOutButton = document.querySelector('.header__signout');
 signOutButton.addEventListener('click', myChat.signOut);
 
-// chat msg and enable send_button
+// input msg and enable send_button
 let message = document.querySelector('.main__input');
 let formButton = document.querySelector('.main__send');
 message.addEventListener('input', myChat.textMessage);
@@ -392,10 +345,26 @@ message.addEventListener('input', myChat.textMessage);
 let form = document.querySelector('.main__input-form');
 form.addEventListener('submit', myChat.sendMessage);
 
+// delete msg
+let deleteButton = document.querySelector('.main__messages');
+deleteButton.addEventListener('click', myChat.deleteMessage);
+
+// input nickname
+let inputName = document.querySelector('.main__container');
+inputName.addEventListener('click', myChat.inputNickname);
+
 // popup window
-let popupWindow = function(){
+let popupWindow = () => {
     document.querySelector('.main__popup').classList.toggle('main__popup_display-none');
     document.querySelector('.main__popup').classList.toggle('main__popup_display-flex');
+}
+
+let unregisteredMessage = () => {
+    document.querySelector('.main__unregistered').classList.toggle('main__unregistered_display-none');
+    document.querySelector('.main__unregistered').classList.toggle('main__unregistered_display-flex');
+
+    document.querySelector('.main__chatinput').classList.toggle('main__chatinput_display-flex');
+    document.querySelector('.main__chatinput').classList.toggle('main__chatinput_display-none');
 }
 
 // display popup window
